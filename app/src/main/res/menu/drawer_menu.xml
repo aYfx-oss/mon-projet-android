@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Primary Section -->
+    <group
+        android:id="@+id/primary_group"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_factures"
+            android:icon="@drawable/facture_logo"
+            android:title="@string/menu_factures" />
+
+        <item
+            android:id="@+id/nav_annonces"
+            android:icon="@drawable/a"
+            android:title="@string/menu_annonces" />
+
+        <item
+            android:id="@+id/nav_historique"
+            android:icon="@drawable/historique"
+            android:title="@string/menu_historique" />
+
+        <item
+            android:id="@+id/nav_reclamations"
+            android:icon="@drawable/complaint"
+            android:title="@string/menu_reclamations" />
+
+        <item
+            android:id="@+id/nav_proximite"
+            android:icon="@drawable/maps"
+            android:title="@string/menu_proximite" />
+
+        <item
+            android:id="@+id/nav_planning"
+            android:icon="@drawable/calendar"
+            android:title="@string/menu_planning" />
+
+        <item
+            android:id="@+id/nav_documents"
+            android:icon="@drawable/file"
+            android:title="@string/menu_documents" />
+    </group>
+
+    <!-- Secondary Section -->
+    <item android:title="@string/menu_settings_section">
+        <menu>
+
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/menu_logout" />
+        </menu>
+    </item>
+
+</menu>

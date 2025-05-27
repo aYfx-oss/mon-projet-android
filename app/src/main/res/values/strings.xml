@@ -1,0 +1,23 @@
+<resources>
+    <string name="EMSI_SP">test</string>
+    <string name="menu_factures">Factures</string>
+    <string name="menu_annonces">Annonces</string>
+    <string name="menu_historique">Historique</string>
+    <string name="menu_reclamations">Réclamations</string>
+    <string name="menu_proximite">À proximité</string>
+    <string name="menu_planning">Planning</string>
+    <string name="menu_documents">Documents</string>
+    <string name="menu_settings_section">Paramètres</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="nom_utilisateur">Nom Utilisateur</string>
+    <string name="localisation_actuelle">Localisation actuelle</string>
+    <string-array name="motifs_array">
+        <item>Malade</item>
+        <item>Retard</item>
+        <item>Non justifié</item>
+        <item>Autre</item>
+    </string-array>
+
+
+</resources>

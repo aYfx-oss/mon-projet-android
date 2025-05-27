@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- Image de profil -->
+    <ImageView
+        android:id="@+id/imgProfil"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/avatar"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_background"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnModifierPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modifier la photo"
+        android:layout_gravity="center"
+        android:backgroundTint="#7E57C2"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp" />
+
+
+    <!-- Champ Nom -->
+    <EditText
+        android:id="@+id/etNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nom"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Champ Prénom -->
+    <EditText
+        android:id="@+id/etPrenom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Prénom"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Bouton Sauvegarder -->
+    <Button
+        android:id="@+id/btnSauvegarder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sauvegarder"
+        android:backgroundTint="#4CAF50"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Bouton Réinitialiser -->
+    <Button
+        android:id="@+id/btnResetPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Réinitialiser la photo"
+        android:backgroundTint="#F44336"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+</LinearLayout>
