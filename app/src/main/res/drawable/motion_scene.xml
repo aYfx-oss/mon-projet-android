@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:motion="http://schemas.android.com/apk/res-auto">
+        <Transition
+            motion:constraintSetStart="@+id/start"
+            motion:constraintSetEnd="@+id/end"
+            motion:duration="800"
+            motion:motionInterpolator="easeInOut">
+
+            <OnClick motion:targetId="@+id/card_user" motion:clickAction="toggle" />
+        </Transition>
+
+        <ConstraintSet android:id="@+id/start">
+            <Constraint android:id="@id/menuGrid"
+                android:layout_height="0dp"
+                motion:layout_constraintTop_toBottomOf="@+id/card_user"
+                android:alpha="0" />
+        </ConstraintSet>
+
+        <ConstraintSet android:id="@+id/end">
+            <Constraint android:id="@id/menuGrid"
+                android:layout_height="0dp"
+                motion:layout_constraintTop_toBottomOf="@+id/card_user"
+                android:alpha="1" />
+        </ConstraintSet>
+    </MotionScene>
+
+</selector>

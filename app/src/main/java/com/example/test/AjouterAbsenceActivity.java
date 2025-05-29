@@ -1,11 +1,16 @@
 package com.example.test;
 
+import android.app.DatePickerDialog;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.test.models.Absence;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
@@ -17,6 +22,7 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
     private Spinner spinnerGroupes, spinnerEtudiants, spinnerMotif, spinnerModule;
     private EditText etDate;
     private Button btnAjouter, btnVoirListe;
+    private View headerLayout;
 
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
@@ -35,6 +41,7 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
         etDate = findViewById(R.id.etDate);
         btnAjouter = findViewById(R.id.btnAjouter);
         btnVoirListe = findViewById(R.id.btnVoirListe);
+        headerLayout = findViewById(R.id.headerLayout);
 
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -42,12 +49,13 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
         initialiserMotifs();
         chargerGroupesDuProf();
         chargerModulesDuProf();
+        activerDegradeAnime();
+        activerDatePicker();
 
         spinnerGroupes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String groupe = groupes.get(position);
-                chargerEtudiantsParGroupe(groupe);
+                chargerEtudiantsParGroupe(groupes.get(position));
             }
 
             @Override
@@ -55,8 +63,10 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
         });
 
         btnAjouter.setOnClickListener(v -> ajouterAbsence());
-        btnVoirListe.setOnClickListener(v ->
-                startActivity(new android.content.Intent(this, ListeAbsencesActivity.class)));
+
+        btnVoirListe.setOnClickListener(v -> {
+            startActivity(new android.content.Intent(this, AbsencesActivity.class));
+        });
     }
 
     private void initialiserMotifs() {
@@ -70,30 +80,27 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
 
     private void chargerModulesDuProf() {
         String profId = currentUser.getUid();
-
         db.collection("professeurs").document(profId).get()
                 .addOnSuccessListener(doc -> {
-                    if (doc.exists() && doc.contains("modules")) {
-                        List<String> modules = (List<String>) doc.get("modules");
-                        if (modules != null) {
-                            spinnerModule.setAdapter(new ArrayAdapter<>(
-                                    this,
-                                    android.R.layout.simple_spinner_dropdown_item,
-                                    modules
-                            ));
-                        }
+                    List<String> modules = (List<String>) doc.get("modules");
+                    if (modules != null) {
+                        spinnerModule.setAdapter(new ArrayAdapter<>(
+                                this,
+                                android.R.layout.simple_spinner_dropdown_item,
+                                modules
+                        ));
                     }
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erreur modules", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Erreur modules", Toast.LENGTH_SHORT).show());
     }
 
     private void chargerGroupesDuProf() {
         String profId = currentUser.getUid();
-
         db.collection("professeurs").document(profId).get()
                 .addOnSuccessListener(doc -> {
-                    if (doc.exists() && doc.contains("groupes")) {
-                        List<String> profGroupes = (List<String>) doc.get("groupes");
+                    List<String> profGroupes = (List<String>) doc.get("groupes");
+                    if (profGroupes != null) {
                         groupes.clear();
                         groupes.addAll(profGroupes);
                         spinnerGroupes.setAdapter(new ArrayAdapter<>(
@@ -105,7 +112,8 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
                         Toast.makeText(this, "Aucun groupe associé", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erreur groupes", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Erreur groupes", Toast.LENGTH_SHORT).show());
     }
 
     private void chargerEtudiantsParGroupe(String groupe) {
@@ -135,7 +143,7 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
         }
 
         DocumentSnapshot etudiant = etudiantsDocs.get(index);
-        String nom = etudiant.getString("nom");
+        String nomEtudiant = etudiant.getString("nom");
         String etudiantId = etudiant.getId();
         String date = etDate.getText().toString().trim();
         String motif = spinnerMotif.getSelectedItem().toString();
@@ -147,22 +155,52 @@ public class AjouterAbsenceActivity extends AppCompatActivity {
             return;
         }
 
-        Absence absence = new Absence(etudiantId, nom, date, motif, module, profId);
+        Absence absence = new Absence(etudiantId, nomEtudiant, date, motif, module, profId);
+
         db.collection("absences").add(absence)
                 .addOnSuccessListener(docRef -> {
-                    // ✅ Utilisation de Timestamp Firebase pour la date
                     Map<String, Object> historique = new HashMap<>();
-                    historique.put("action", "Ajout d'une absence pour " + nom);
-                    historique.put("date", com.google.firebase.Timestamp.now());
-                    historique.put("professeur_id", profId); // 🟢 Assure la cohérence avec l'affichage
+                    historique.put("action", "Ajout d'une absence pour " + nomEtudiant);
+                    historique.put("date", Timestamp.now());
+                    historique.put("professeur_id", profId);
 
                     db.collection("Historiques").add(historique);
 
                     Toast.makeText(this, "Absence ajoutée", Toast.LENGTH_SHORT).show();
                     finish();
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Erreur : " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Log.e("AjouterAbsence", "Erreur Firestore", e);
+                    Toast.makeText(this, "Erreur : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
+    private void activerDegradeAnime() {
+        if (headerLayout != null && headerLayout.getBackground() instanceof AnimationDrawable) {
+            AnimationDrawable animationDrawable = (AnimationDrawable) headerLayout.getBackground();
+            animationDrawable.setEnterFadeDuration(1500);
+            animationDrawable.setExitFadeDuration(1500);
+            animationDrawable.start();
+        }
+    }
+
+    private void activerDatePicker() {
+        etDate.setFocusable(false);
+        etDate.setOnClickListener(v -> {
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String formattedDate = selectedYear + "-" +
+                                String.format("%02d", selectedMonth + 1) + "-" +
+                                String.format("%02d", selectedDay);
+                        etDate.setText(formattedDate);
+                    }, year, month, day);
+
+            dpd.show();
+        });
+    }
 }

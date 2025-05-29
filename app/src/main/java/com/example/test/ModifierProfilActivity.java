@@ -147,9 +147,26 @@ public class ModifierProfilActivity extends AppCompatActivity {
                                         })
                                         .addOnFailureListener(e -> Toast.makeText(this, "Erreur Firestore", Toast.LENGTH_SHORT).show());
                             })
-                            .addOnFailureListener(e -> Toast.makeText(this, "Erreur suppression : " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                            .addOnFailureListener(e -> {
+                                String msg = e.getMessage();
+                                if (msg != null && msg.contains("Object does not exist")) {
+                                    // Même comportement que success si déjà supprimé
+                                    Map<String, Object> updates = new HashMap<>();
+                                    updates.put("photoUrl", null);
+
+                                    db.collection("professeurs").document(uid).update(updates)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(this, "Photo supprimée", Toast.LENGTH_SHORT).show();
+                                                imgProfil.setImageResource(R.drawable.avatar);
+                                            })
+                                            .addOnFailureListener(err -> Toast.makeText(this, "Erreur Firestore", Toast.LENGTH_SHORT).show());
+                                } else {
+                                    Toast.makeText(this, "Erreur suppression : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 })
                 .setNegativeButton("Non", null)
                 .show();
     }
+
 }

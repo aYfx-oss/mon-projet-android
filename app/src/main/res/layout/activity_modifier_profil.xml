@@ -6,7 +6,7 @@
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@drawable/bg_gradient_purple">
 
     <!-- Image de profil -->
     <ImageView

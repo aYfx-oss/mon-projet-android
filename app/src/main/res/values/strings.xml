@@ -18,6 +18,11 @@
         <item>Non justifié</item>
         <item>Autre</item>
     </string-array>
+    <string name="desc_supprimer">Supprimer</string>
+    <string name="documents_title"> Documents</string>
+    <string name="ajouter_document">Ajouter un document</string>
+
+
 
 
 </resources>

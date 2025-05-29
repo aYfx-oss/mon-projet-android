@@ -42,6 +42,8 @@ public class RattrapageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         chargerEtAfficherRattrapages();
+
+        // ajouterRattrapageManuellement(); // Décommente pour tester l'ajout manuel
     }
 
     private void chargerEtAfficherRattrapages() {
@@ -67,6 +69,7 @@ public class RattrapageActivity extends AppCompatActivity {
                 );
     }
 
+    // ✅ GARDE SEULEMENT CETTE VERSION
     private void afficherRattrapages(String profUid, List<String> modules) {
         db.collection("Rattrapages")
                 .whereEqualTo("professeur_id", profUid)
@@ -75,20 +78,18 @@ public class RattrapageActivity extends AppCompatActivity {
                     rattrapageList.clear();
 
                     for (QueryDocumentSnapshot doc : querySnapshot) {
-                        String matiere = doc.getString("matiere");
-
-                        if (modules.contains(matiere)) {
-                            Rattrapages r = doc.toObject(Rattrapages.class);
+                        Rattrapages r = doc.toObject(Rattrapages.class);
+                        if (modules.contains(r.getMatiere())) {
                             rattrapageList.add(r);
                         }
                     }
 
-                    // 🔽 TRI : par date puis par heure
+                    // Tri par date puis par heure
                     Collections.sort(rattrapageList, (r1, r2) -> {
                         int compareDate = r1.getDate().compareTo(r2.getDate());
                         if (compareDate != 0) return compareDate;
 
-                        String h1 = r1.getHeure().split("–")[0].trim(); // gère format "08:00 – 09:30"
+                        String h1 = r1.getHeure().split("–")[0].trim();
                         String h2 = r2.getHeure().split("–")[0].trim();
                         return h1.compareTo(h2);
                     });

@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#FAFAFA">
+    android:background="@drawable/bg_gradient_purple"
+    android:padding="18dp">
 
-    <!-- Titre de la page -->
+    <!-- Titre moderne -->
     <TextView
         android:id="@+id/tvTitreReclamations"
         android:layout_width="match_parent"
@@ -14,14 +14,24 @@
         android:text="Réclamations"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:letterSpacing="0.09"
+        android:textColor="#6F4EC6"
         android:gravity="center"
-        android:paddingBottom="16dp" />
+        android:background="@android:color/transparent"
+        android:shadowColor="#B388FF"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="4"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="18dp"/>
 
     <!-- Liste des réclamations -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewReclamations"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:scrollbars="vertical"/>
 </LinearLayout>

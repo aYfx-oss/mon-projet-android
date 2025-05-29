@@ -3,22 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:background="@drawable/bg_gradient_purple"
+    android:paddingTop="32dp"
+    android:paddingBottom="0dp"
+    android:paddingStart="0dp"
+    android:paddingEnd="0dp">
 
     <TextView
+        android:id="@+id/planning_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=" Planning"
-        android:textSize="22sp"
+        android:text="Planning"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:letterSpacing="0.08"
+        android:textColor="#6F4EC6"
         android:gravity="center"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="10dp"
+        android:shadowColor="#B388FF"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="4" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPlanning"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:scrollbars="vertical" />
 </LinearLayout>

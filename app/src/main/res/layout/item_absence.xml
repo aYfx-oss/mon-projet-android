@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="#EEEEEE"
-    android:layout_marginBottom="8dp"
-    android:gravity="center_vertical">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@android:color/transparent">
 
-    <!-- Infos de l'absence -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvNomEtudiant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nom Étudiant"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/students"
+        android:contentDescription="Avatar étudiant"
+        android:layout_marginEnd="16dp" />
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Date" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:spacing="4dp">
 
-        <TextView
-            android:id="@+id/tvMotif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Motif" />
+            <TextView
+                android:id="@+id/tvNomEtudiant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom Étudiant"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#212121" />
 
-        <TextView
-            android:id="@+id/tvModule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Module" />
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/tvMotif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Motif"
+                android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/tvModule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Module"
+                android:textColor="#757575" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnSupprimer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:background="?android:selectableItemBackgroundBorderless"
+            app:tint="#D32F2F"
+            android:contentDescription="@string/desc_supprimer" />
+
     </LinearLayout>
-
-    <!-- Bouton Supprimer -->
-    <Button
-        android:id="@+id/btnSupprimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Supprimer"
-        android:textSize="12sp"
-        android:backgroundTint="#F44336"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,7 +1,9 @@
 package com.example.test;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 🎨 Lancer l'animation du fond dégradé
+        View rootLayout = findViewById(R.id.root_layout);
+        if (rootLayout.getBackground() instanceof AnimationDrawable) {
+            AnimationDrawable animationDrawable = (AnimationDrawable) rootLayout.getBackground();
+            animationDrawable.setEnterFadeDuration(2000);
+            animationDrawable.setExitFadeDuration(2000);
+            animationDrawable.start();
+        }
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -80,15 +91,12 @@ public class MainActivity extends AppCompatActivity {
                                         data.put("professeur_id", uid);
 
                                         docRef.set(data)
-                                                .addOnSuccessListener(unused ->
-                                                        Toast.makeText(this, "Profil ajouté à Firestore", Toast.LENGTH_SHORT).show())
-                                                .addOnFailureListener(e ->
-                                                        Toast.makeText(this, "Erreur Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                                .addOnSuccessListener(unused -> Toast.makeText(this, "Profil ajouté à Firestore", Toast.LENGTH_SHORT).show())
+                                                .addOnFailureListener(e -> Toast.makeText(this, "Erreur Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                                     }
 
-                                    // Redirection vers le menu principal
-                                    Intent intent = new Intent(this, MenuActivity.class);
-                                    startActivity(intent);
+                                    // Redirection vers Menu
+                                    startActivity(new Intent(this, MenuActivity.class));
                                     finish();
                                 });
 
@@ -98,9 +106,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Toast.makeText(this, "Erreur: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Erreur : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 }

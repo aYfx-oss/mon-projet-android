@@ -1,7 +1,9 @@
 package com.example.test;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,9 +28,18 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // ✅ Animation du fond
+        View rootLayout = findViewById(R.id.root_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) rootLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.start();
+
+        // ✅ Initialisation Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // ✅ Initialisation des vues
         etNom = findViewById(R.id.et_nom);
         etPrenom = findViewById(R.id.et_prenom);
         etEmailr = findViewById(R.id.et_emailr);
@@ -37,12 +48,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         TextView tvBackToLogin = findViewById(R.id.tv_back_to_login);
 
-        btnRegister.setOnClickListener(v -> registerUser());
-
+        // ✅ Click : retour vers la page de connexion
         tvBackToLogin.setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
         });
+
+        // ✅ Click : inscription
+        btnRegister.setOnClickListener(v -> registerUser());
     }
 
     private void registerUser() {
@@ -57,6 +70,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (!email.endsWith("@emsi-edu.ma")) {
+            Toast.makeText(this, "Utilisez une adresse email @emsi-edu.ma", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!password.equals(confirm)) {
             Toast.makeText(this, "Les mots de passe ne correspondent pas", Toast.LENGTH_SHORT).show();
             return;
@@ -67,16 +85,14 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // ✅ Envoyer mail de vérification
                             user.sendEmailVerification()
                                     .addOnSuccessListener(unused -> Toast.makeText(this,
-                                            "Mail de vérification envoyé à : " + user.getEmail(),
+                                            "Vérifiez votre email : " + user.getEmail(),
                                             Toast.LENGTH_LONG).show())
                                     .addOnFailureListener(e -> Toast.makeText(this,
-                                            "Erreur d'envoi du mail : " + e.getMessage(),
+                                            "Erreur d'envoi de mail : " + e.getMessage(),
                                             Toast.LENGTH_SHORT).show());
 
-                            // ✅ Ajout dans Firestore
                             String uid = user.getUid();
                             Map<String, Object> profData = new HashMap<>();
                             profData.put("email", email);
@@ -90,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                             db.collection("professeurs").document(uid)
                                     .set(profData)
                                     .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(this, "Profil enregistré, veuillez vérifier votre email", Toast.LENGTH_SHORT).show();
-                                        mAuth.signOut(); // Important : forcer la vérification avant accès
+                                        Toast.makeText(this, "Profil enregistré. Vérifiez votre email.", Toast.LENGTH_SHORT).show();
+                                        mAuth.signOut();
                                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                         finish();
                                     })

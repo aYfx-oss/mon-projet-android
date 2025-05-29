@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private TextView tvGreeting, tvNom;
     private ImageView imgUser;
-    private Button btnVoirProfil; // ✅ Nouveau bouton
+    private Button btnVoirProfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +49,10 @@ public class MenuActivity extends AppCompatActivity {
         tvGreeting = findViewById(R.id.greetingText);
         tvNom = findViewById(R.id.dashboard_adminName);
         imgUser = findViewById(R.id.userPhoto);
-        btnVoirProfil = findViewById(R.id.btnVoirProfil); // ✅ Initialise le bouton
+        btnVoirProfil = findViewById(R.id.btnVoirProfil);
 
         btnVoirProfil.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ModifierProfilActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ModifierProfilActivity.class));
         });
 
         chargerInfosProf();
@@ -75,66 +75,61 @@ public class MenuActivity extends AppCompatActivity {
                     if (doc.exists()) {
                         String nom = doc.getString("nom");
                         String prenom = doc.getString("prenom");
-
-                        tvGreeting.setText("Bonjour Monsieur/Mme");
+                        tvGreeting.setText("Bonjour,");
                         tvNom.setText(prenom + " " + nom);
 
-                        // ✅ Vérifie si le champ photoUrl existe et est non vide
-                        if (doc.contains("photoUrl")) {
-                            String photoUrl = doc.getString("photoUrl");
-                            if (photoUrl != null && !photoUrl.trim().isEmpty()) {
-                                Glide.with(this)
-                                        .load(photoUrl)
-                                        .circleCrop()
-                                        .placeholder(R.drawable.avatar) // si lenteur réseau
-                                        .into(imgUser);
-                            } else {
-                                imgUser.setImageResource(R.drawable.avatar);
-                            }
+                        String photoUrl = doc.getString("photoUrl");
+                        if (photoUrl != null && !photoUrl.trim().isEmpty()) {
+                            Glide.with(this)
+                                    .load(photoUrl)
+                                    .circleCrop()
+                                    .placeholder(R.drawable.avatar)
+                                    .into(imgUser);
                         } else {
                             imgUser.setImageResource(R.drawable.avatar);
                         }
                     } else {
-                        tvNom.setText("Nomutilisateur");
-                        imgUser.setImageResource(R.drawable.avatar);
-                        Toast.makeText(this, "Aucun profil trouvé", Toast.LENGTH_SHORT).show();
+                        afficherProfilInconnu();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    tvNom.setText("Nomutilisateur");
-                    imgUser.setImageResource(R.drawable.avatar);
+                    afficherProfilInconnu();
                     Toast.makeText(this, "Erreur : " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-
+    private void afficherProfilInconnu() {
+        tvNom.setText("Nom utilisateur");
+        imgUser.setImageResource(R.drawable.avatar);
+    }
 
     private void setupCardListeners() {
-        findViewById(R.id.card_factures).setOnClickListener(v -> startActivity(new Intent(this, RattrapageActivity.class)));
-        findViewById(R.id.card_annonces).setOnClickListener(v -> startActivity(new Intent(this, AjouterAbsenceActivity.class)));
-        findViewById(R.id.card_historique).setOnClickListener(v -> startActivity(new Intent(this, HistoriqueActivity.class)));
-        findViewById(R.id.card_reclamations).setOnClickListener(v -> startActivity(new Intent(this, ReclamationsActivity.class)));
-        findViewById(R.id.card_proximite).setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class)));
-        findViewById(R.id.card_planning).setOnClickListener(v -> startActivity(new Intent(this, PlanningActivity.class)));
-        findViewById(R.id.card_documents).setOnClickListener(v -> startActivity(new Intent(this, DocumentsActivity.class)));
-        findViewById(R.id.card_logout).setOnClickListener(v -> {
-            mAuth.signOut();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
+        attacherClick(R.id.card_factures, RattrapageActivity.class);
+        attacherClick(R.id.card_absences, AjouterAbsenceActivity.class); // Remplace card_annonces par card_absences
+        attacherClick(R.id.card_historique, HistoriqueActivity.class);
+        attacherClick(R.id.card_reclamations, ReclamationsActivity.class);
+        attacherClick(R.id.card_proximite, MapActivity.class);
+        attacherClick(R.id.card_planning, PlanningActivity.class);
+        attacherClick(R.id.card_documents, DocumentsActivity.class);
+        attacherClick(R.id.card_assistant, GeminiChatActivity.class);
 
-        // Assistant virtuel
-        findViewById(R.id.card_assistant).setOnClickListener(v -> {
-            Intent intent = new Intent(this, GeminiChatActivity.class);
-            startActivity(intent);
-        });
-        findViewById(R.id.card_guide).setOnClickListener(v -> {
-            Intent intent = new Intent(this, GuideProfActivity.class);
-            startActivity(intent);
-        });
+        View logoutCard = findViewById(R.id.card_logout);
+        if (logoutCard != null) {
+            logoutCard.setOnClickListener(v -> {
+                mAuth.signOut();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
+    }
 
+    private void attacherClick(int id, Class<?> targetActivity) {
+        View card = findViewById(id);
+        if (card != null) {
+            card.setOnClickListener(v -> startActivity(new Intent(this, targetActivity)));
+        }
     }
 
     private void requestLocation() {
@@ -164,14 +159,12 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE &&
-                grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             requestLocation();
+        } else {
+            Toast.makeText(this, "Permission de localisation refusée", Toast.LENGTH_SHORT).show();
         }
     }
 }

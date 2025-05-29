@@ -30,9 +30,16 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
     @Override
     public void onBindViewHolder(@NonNull ReclamationViewHolder holder, int position) {
         Reclamation r = reclamationList.get(position);
-        holder.tvObjet.setText("reclamations : " + r.getObjet());
-        holder.tvMessage.setText("Message : " + r.getMessage());
-        holder.tvDate.setText("Date : " + r.getDate());
+        holder.tvObjet.setText(r.getObjet());
+        holder.tvMessage.setText(r.getMessage());
+        holder.tvDate.setText(r.getDate());
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ReclamationViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.itemView.setAlpha(0f);
+        holder.itemView.animate().alpha(1f).setDuration(400).start();
     }
 
     @Override

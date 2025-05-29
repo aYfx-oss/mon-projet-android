@@ -1,34 +1,60 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    android:elevation="4dp"
-    android:padding="12dp">
+    android:elevation="5dp"
+    android:backgroundTint="@android:color/white"
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="0dp">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView android:id="@+id/tvObjet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Objet"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_message_alert"
+            android:background="@drawable/circle_background_accent"
+            android:padding="8dp"
+            android:layout_marginEnd="12dp" />
 
-        <TextView android:id="@+id/tvMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Message"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
 
-        <TextView android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Date"
-            android:textSize="12sp"
-            android:textColor="#888888"/>
+            <TextView
+                android:id="@+id/tvObjet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Objet"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="#6F4EC6" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Message"
+                android:textSize="14sp"
+                android:textColor="#222222" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Date"
+                android:textSize="12sp"
+                android:textColor="#888888"/>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

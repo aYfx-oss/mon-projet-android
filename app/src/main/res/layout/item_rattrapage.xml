@@ -1,60 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@drawable/card_background"
-    android:layout_margin="8dp"
-    android:elevation="4dp"
-    android:gravity="center_vertical">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
-    <!-- Bloc heure -->
-    <TextView
-        android:id="@+id/tvHeure"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:background="@drawable/day_background"
-        android:text="14:00"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="16sp" />
-
-    <!-- Bloc infos -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginStart="12dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvTitre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Matière : Java"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginTop="4dp" />
+        <!-- Heure dans un cercle avec dégradé -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_circle_gradient"
+            android:layout_gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date : 2025-06-01"
-            android:textSize="14sp"
-            android:textColor="#888888"
-            android:layout_marginTop="2dp" />
+            <TextView
+                android:id="@+id/tvHeure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="08:30"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/tvMontant"
-            android:layout_width="wrap_content"
+        <!-- Infos -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Heure : 14:00 | Salle : A102"
-            android:textSize="13sp"
-            android:textColor="#777777"
-            android:layout_marginTop="1dp" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/tvTitre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Matière : Java"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#23254B"
+                android:layout_marginBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date : 2025-06-01"
+                android:textSize="14sp"
+                android:textColor="#8A8A8A"
+                android:layout_marginBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/tvMontant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Heure : 14:00 | Salle : A102"
+                android:textSize="13sp"
+                android:textColor="#777777"/>
+        </LinearLayout>
+
+        <!-- Emoji/symbole -->
+        <TextView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="📚"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_marginStart="10dp"/>
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>
